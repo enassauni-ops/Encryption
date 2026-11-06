@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>أكاديمية الشبح الفلسطيني PCG</title>
+  <style>
+    :root{
+      --bg:#090d16;          /* أسود كاحل */
+      --green:#00ff66;      /* أخضر مضيء */
+      --blue:#38bdf8;       /* أزرق ساطع */
+      --text:#d6e7ff;
+      --muted:#8aa3c7;
+      --card: rgba(10, 14, 26, 0.72);
+      --card2: rgba(6, 10, 20, 0.72);
+      --border: rgba(0, 255, 102, 0.18);
+      --shadowG: 0 0 20px rgba(0,255,102,0.35), 0 0 45px rgba(0,255,102,0.18);
+      --shadowB: 0 0 18px rgba(56,189,248,0.35), 0 0 40px rgba(56,189,248,0.18);
+      --shadowAll: 0 0 26px rgba(0,255,102,0.25), 0 0 26px rgba(56,189,248,0.18);
+      --danger:#ff4d6d;
+      --ok:#00ff66;
+      --radius:18px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: "Tajawal","Segoe UI",Tahoma,Arial,sans-serif;
+      background: radial-gradient(1200px 700px at 20% 0%, rgba(0,255,102,0.10), transparent 55%),
+                  radial-gradient(900px 600px at 90% 20%, rgba(56,189,248,0.12), transparent 50%),
+                  radial-gradient(800px 650px at 60% 100%, rgba(0,255,102,0.08), transparent 55%),
+                  linear-gradient(180deg, #050812 0%, var(--bg) 60%, #050812 100%);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    /* خلفية تموجية سيبرانية */
+    .grid{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(transparent 0 96%, rgba(56,189,248,0.07) 100%),
+        linear-gradient(90deg, transparent 0 96%, rgba(0,255,102,0.06) 100%);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at 50% 20%, rgba(0,0,0,1), rgba(0,0,0,0) 70%);
+      opacity:.6;
+    }
+
+    .scanlines{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.03) 0px,
+        rgba(255,255,255,0.01) 2px,
+        transparent 4px
+      );
+      opacity:.25;
+      mix-blend-mode: screen;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:26px 16px 50px;
+    }
+
+    header{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      padding:18px 18px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,14,26,0.82), rgba(8,12,22,0.58));
+      border: 1px solid rgba(56,189,248,0.16);
+      box-shadow: var(--shadowAll);
+      position:relative;
+      overflow:hidden;
+    }
+
+    header::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(650px 180px at 10% 0%, rgba(0,255,102,0.22), transparent 55%),
+        radial-gradient(520px 160px at 80% 10%, rgba(56,189,248,0.20), transparent 55%);
+      filter: blur(2px);
+      opacity:.95;
+      pointer-events:none;
+    }
+
+    .brand{
+      position:relative;
+      z-index:1;
+      min-width: 320px;
+    }
+    .brand h1{
+      margin:0 0 6px;
+      font-size: 22px;
+      letter-spacing: .3px;
+      text-shadow: 0 0 16px rgba(0,255,102,0.25);
+    }
+    .brand .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    .badge{
+      position:relative;
+      z-index:1;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:8px;
+    }
+
+    .pill{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,255,102,0.22);
+      background: rgba(0,255,102,0.07);
+      box-shadow: var(--shadowG);
+      font-weight:700;
+      color:#caffdd;
+      font-size:13px;
+      white-space:nowrap;
+    }
+
+    .pill.blue{
+      border-color: rgba(56,189,248,0.22);
+      background: rgba(56,189,248,0.08);
+      box-shadow: var(--shadowB);
+      color:#d8f3ff;
+    }
+
+    .content{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+
+    @media (min-width: 960px){
+      .content{
+        grid-template-columns: 1.05fr .95fr;
+        align-items:start;
+      }
+    }
+
+    .card{
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      border: 1px solid rgba(0,255,102,0.14);
+      border-radius: var(--radius);
+      box-shadow: 0 0 30px rgba(0,255,102,0.08);
+      overflow:hidden;
+    }
+
+    .card .head{
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(56,189,248,0.12);
+    }
+
+    .card .head h2{
+      margin:0;
+      font-size:14px;
+      letter-spacing: .4px;
+      color:#bfffdc;
+      text-transform:uppercase;
+    }
+
+    .status{
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,0.18);
+      box-shadow:none;
+    }
+    .dot.ok{
+      background: rgba(0,255,102,0.9);
+      box-shadow: 0 0 16px rgba(0,255,102,0.35);
+    }
+    .dot.bad{
+      background: rgba(255,77,109,0.9);
+      box-shadow: 0 0 16px rgba(255,77,109,0.28);
+    }
+
+    .card .body{
+      padding:16px;
+    }
+
+    .field{
+      margin-bottom:12px;
+    }
+
+    .label{
+      font-size:13px;
+      color: #b6c7e2;
+      margin-bottom:8px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .hint{
+      font-size:12px;
+      color: rgba(182,199,226,0.75);
+    }
+
+    input[type="text"],
+    input[type="password"],
+    textarea{
+      width:100%;
+      background: rgba(5, 8, 18, 0.65);
+      border: 1px solid rgba(56,189,248,0.16);
+      border-radius: 12px;
+      padding: 12px 12px;
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s ease, box-shadow .15s ease, transform .05s ease;
+    }
+
+    textarea{
+      min-height:120px;
+      resize: vertical;
+      line-height:1.6;
+    }
+
+    input:focus, textarea:focus{
+      border-color: rgba(0,255,102,0.35);
+      box-shadow: 0 0 0 3px rgba(0,255,102,0.12), 0 0 22px rgba(0,255,102,0.15);
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .keyWrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .keyWrap .grow{ flex:1; }
+
+    .iconBtn{
+      border:none;
+      cursor:pointer;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      background: rgba(56,189,248,0.08);
+      border: 1px solid rgba(56,189,248,0.18);
+      box-shadow: 0 0 18px rgba(56,189,248,0.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#cfeaff;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+    }
+    .iconBtn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(0,255,102,0.35);
+      background: rgba(0,255,102,0.08);
+    }
+    .iconBtn:active{ transform: translateY(0px); }
+
+    button{
+      cursor:pointer;
+    }
+
+    .btnRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .btn{
+      padding:12px 14px;
+      border-radius:14px;
+      border: 1px solid rgba(0,255,102,0.20);
+      background: rgba(0,255,102,0.08);
+      color:#d8ffe9;
+      font-weight:800;
+      letter-spacing:.2px;
+      box-shadow: 0 0 22px rgba(0,255,102,0.10);
+      transition: transform .08s ease, filter .15s ease, border-color .15s ease, background .15s ease;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex: 1 1 auto;
+      justify-content:center;
+      min-width: 190px;
+    }
+
+    .btn.blue{
+      border-color: rgba(56,189,248,0.22);
+      background: rgba(56,189,248,0.10);
+      color:#d7f4ff;
+      box-shadow: 0 0 22px rgba(56,189,248,0.10);
+    }
+
+    .btn.danger{
+      border-color: rgba(255,77,109,0.28);
+      background: rgba(255,77,109,0.08);
+      color:#ffd2db;
+      box-shadow: 0 0 22px rgba(255,77,109,0.08);
+    }
+
+    .btn:hover{
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      border-color: rgba(0,255,102,0.40);
+    }
+    .btn.blue:hover{ border-color: rgba(56,189,248,0.42); }
+    .btn.danger:hover{ border-color: rgba(255,77,109,0.55); }
+
+    .btn:disabled{
+      cursor:not-allowed;
+      opacity:.6;
+      transform:none;
+      filter:none;
+    }
+
+    .resultBox{
+      position:relative;
+      overflow:hidden;
+      border-radius: var(--radius);
+      border: 1px solid rgba(56,189,248,0.14);
+      background: rgba(5, 8, 18, 0.55);
+    }
+
+    .resultBox .top{
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom:1px solid rgba(56,189,248,0.12);
+    }
+
+    .resultTitle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      color:#c9f9de;
+      letter-spacing:.3px;
+      font-size:13px;
+      text-transform: uppercase;
+    }
+
+    .copyBtn{
+      padding:10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,255,102,0.20);
+      background: rgba(0,255,102,0.08);
+      color:#caffdd;
+      font-weight:900;
+      transition: background .15s ease, border-color .15s ease, transform .08s ease;
+      white-space:nowrap;
+    }
+    .copyBtn.copied{
+      border-color: rgba(0,255,102,0.55);
+      background: rgba(0,255,102,0.22);
+      box-shadow: 0 0 18px rgba(0,255,102,0.20);
+      color:#eafff1;
+    }
+
+    .resultBox textarea{
+      border:none;
+      border-radius:0;
+      background: transparent;
+      min-height: 210px;
+      padding: 14px;
+      outline:none;
+    }
+
+    .msg{
+      margin-top:10px;
+      font-size:13px;
+      color: var(--muted);
+      line-height:1.7;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(56,189,248,0.12);
+      background: rgba(56,189,248,0.05);
+    }
+
+    .msg strong{
+      color:#d7f4ff;
+    }
+
+    .dangerText{
+      color: rgba(255,77,109,0.95);
+      border-color: rgba(255,77,109,0.20);
+      background: rgba(255,77,109,0.07);
+    }
+
+    footer{
+      margin-top:14px;
+      text-align:center;
+      color: rgba(182,199,226,0.7);
+      font-size:12px;
+    }
+    .kbd{
+      font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      font-size:12px;
+      padding:2px 7px;
+      border-radius: 10px;
+      border:1px solid rgba(56,189,248,0.20);
+      background: rgba(56,189,248,0.07);
+      color:#d7f4ff;
+      white-space:nowrap;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grid"></div>
+  <div class="scanlines"></div>
+
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>أكاديمية الشبح الفلسطيني PCG</h1>
+        <p class="sub">تطوير: عز الدين شبح السايبر الفلسطيني</p>
+         <p class="sub">(عبد المؤمن يزيد سلامة أبوسويرح)</p>
+      </div>
+      <div class="badge">
+         <div class="pill blue">فريق الشبح الفلسطيي (PCG)</div>
+        <div class="pill blue">غرف سرية سيبرانية</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- يسار: الإدخالات -->
+      <section class="card">
+        <div class="head">
+          <h2>غرف سرية - تشفير / فك تشفير</h2>
+          <div class="status">
+            <span id="authDot" class="dot"></span>
+            <span id="authText">أدخل مفتاحاً مصرحاً للدخول</span>
+          </div>
+        </div>
+
+        <div class="body">
+          <div class="field">
+            <div class="label">
+              <span>مفتاح الغرفة (Passphrase)</span>
+              
+            </div>
+            <div class="keyWrap">
+              <div class="grow">
+                <input id="keyInput" type="password" autocomplete="off" placeholder="اكتب المفتاح المصرح به..." />
+              </div>
+
+              <!-- عين لإخفاء/إظهار كلمة السر -->
+              <button id="eyeBtn" class="iconBtn" type="button" aria-label="إظهار/إخفاء كلمة السر" title="إظهار/إخفاء كلمة السر">
+                <!-- أيقونة عين -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2.5 12s3.5-7 9.5-7 9.5 7 9.5 7-3.5 7-9.5 7-9.5-7-9.5-7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">
+              <span>النص (Plaintext / Ciphertext)</span>
+              <span class="hint">اختر زر “تشفير” أو “فك التشفير” حسب الحاجة</span>
+            </div>
+            <textarea id="textInput" placeholder="اكتب النص الذي تريد تشفيره… أو الصيغة المشفرة التي تريد فكها…"></textarea>
+          </div>
+
+          <div class="btnRow">
+            <!-- زر تشفير -->
+            <button id="encryptBtn" class="btn" type="button">
+              <span>🔒</span> تشغيل التشفير (AES)
+            </button>
+            <!-- زر فك التشفير -->
+            <button id="decryptBtn" class="btn blue" type="button">
+              <span>🔓</span> تشغيل فك التشفير (AES)
+            </button>
+          </div>
+
+          <div class="msg" id="messageBox">
+            <strong>ملاحظة:</strong> اذا استخدمت مفتاح غير مصرح به  او غير الذي تم التشفير به لن يتم فك النص
+          </div>
+        </div>
+      </section>
+
+      <!-- يمين: النتيجة -->
+      <aside class="card">
+        <div class="head">
+          <h2>النتيجة</h2>
+          <div class="status">
+            <span class="kbd">Output</span>
+          </div>
+        </div>
+
+        <div class="body">
+          <div class="resultBox">
+            <div class="top">
+              <div class="resultTitle">
+                <span>⚡</span>
+                <span>ناتج AES</span>
+              </div>
+              <!-- زر نسخ مع تغيير اللون عند النسخ -->
+              <button id="copyBtn" class="copyBtn" type="button">نسخ</button>
+            </div>
+            <textarea id="resultArea" readonly placeholder="سيظهر هنا ناتج التشفير/فك التشفير..."></textarea>
+          </div>
+
+          <div class="msg" id="securityBox" style="margin-top:12px;">
+            <strong>صيغة الإخراج:</strong> عند التشفير سنعرض: <span class="kbd">Base64(salt).Base64(iv).Base64(ciphertext)</span>
+            <br />
+            <span style="color:rgba(182,199,226,0.78);">وعند فك التشفير سنقوم بقراءة هذه الصيغة تلقائياً.</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+     فريق الشبح الفلسطيني (PCG)
+    </footer>
+  </div>
+
+  <script>
+    // ==============================
+    // إعدادات المصادقة (مفاتيح مسموحة فقط)
+    // ==============================
+    const ALLOWED_KEYS = ["farah", "yazeed77", "AMSLD", "ICGAQ", "PCG", "2009", "2008", "2030", "7744", "1177", "8080", "kali", "Abu-Sweireh"];
+
+    // ==============================
+    // عناصر الواجهة
+    // ==============================
+    const keyInput = document.getElementById("keyInput");
+    const textInput = document.getElementById("textInput");
+
+    const encryptBtn = document.getElementById("encryptBtn");
+    const decryptBtn = document.getElementById("decryptBtn");
+
+    const eyeBtn = document.getElementById("eyeBtn");
+
+    const resultArea = document.getElementById("resultArea");
+    const copyBtn = document.getElementById("copyBtn");
+
+    const authDot = document.getElementById("authDot");
+    const authText = document.getElementById("authText");
+
+    const messageBox = document.getElementById("messageBox");
+
+    // ==============================
+    // عناصر مساعدة: ترجمة/تحويلات
+    // ==============================
+    function bytesToBase64(bytes) {
+      // تحويل Bytes إلى Base64
+      let binary = "";
+      const chunkSize = 0x8000;
+      for (let i = 0; i < bytes.length; i += chunkSize) {
+        const chunk = bytes.subarray(i, i + chunkSize);
+        binary += String.fromCharCode.apply(null, chunk);
+      }
+      return btoa(binary);
+    }
+
+    function base64ToBytes(base64) {
+      // تحويل Base64 إلى Bytes
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return bytes;
+    }
+
+    function strToBytes(str) {
+      // تحويل النص إلى UTF-8 bytes
+      return new TextEncoder().encode(str);
+    }
+
+    function bytesToStr(bytes) {
+      // تحويل UTF-8 bytes إلى نص
+      return new TextDecoder().decode(bytes);
+    }
+
+    // ==============================
+    // WebCrypto: توليد مفتاح AES من كلمة المرور (PBKDF2)
+    // ==============================
+    async function deriveAesKeyFromPassphrase(passphrase, saltBytes) {
+      // PBKDF2 ثم توليد مفتاح AES-GCM
+      // (تثبيت عدد الدورات/الملح ضمنيًا عبر saltBytes الذي يولد لكل عملية تشفير)
+      const baseKey = await crypto.subtle.importKey(
+        "raw",
+        strToBytes(passphrase),
+        { name: "PBKDF2" },
+        false,
+        ["deriveKey"]
+      );
+
+      const aesKey = await crypto.subtle.deriveKey(
+        {
+          name: "PBKDF2",
+          salt: saltBytes,
+          iterations: 210000,
+          hash: "SHA-256"
+        },
+        baseKey,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt", "decrypt"]
+      );
+
+      return aesKey;
+    }
+
+    // ==============================
+    // التحقق من المفتاح المصرح
+    // ==============================
+    function validateKey() {
+      const key = (keyInput.value || "").trim();
+
+      const isAllowed = ALLOWED_KEYS.includes(key);
+
+      if (isAllowed) {
+        authDot.classList.remove("bad");
+        authDot.classList.add("ok");
+        authText.textContent = "تم التحقق: مفتاح مصرح ✅";
+        encryptBtn.disabled = false;
+        decryptBtn.disabled = false;
+
+        messageBox.classList.remove("dangerText");
+      } else {
+        authDot.classList.remove("ok");
+        authDot.classList.add("bad");
+        if (key.length === 0) {
+          authText.textContent = "أدخل مفتاحاً مصرحاً للدخول";
+        } else {
+          authText.textContent = "مرفوض: مفتاح غير مصرح ❌";
+        }
+
+        encryptBtn.disabled = true;
+        decryptBtn.disabled = true;
+
+        if (key.length > 0) {
+          messageBox.classList.add("dangerText");
+          messageBox.innerHTML = "<strong>عذراً، هذا المفتاح غير مصرح له بدخول الغرف السرية!</strong>";
+        } else {
+          messageBox.classList.remove("dangerText");
+          messageBox.innerHTML = "<strong>ملاحظة:</strong> يعمل هذا التطبيق داخل المتصفح فقط (Client-side). سيتم اشتقاق مفتاح AES من كلمة المرور بواسطة PBKDF2، ثم استخدام AES-GCM.";
+        }
+      }
+
+      return isAllowed;
+    }
+
+    // ==============================
+    // التشفير (AES-GCM)
+    // ==============================
+    async function encryptText() {
+      // التحقق من المفتاح
+      if (!validateKey()) {
+        alert("عذراً، هذا المفتاح غير مصرح له بدخول الغرف السرية!");
+        return;
+      }
+
+      const passphrase = keyInput.value.trim();
+      const plaintext = textInput.value;
+
+      if (!plaintext || plaintext.trim().length === 0) {
+        alert("الرجاء إدخال نص للتشفير.");
+        return;
+      }
+
+      // توليد salt و IV لكل عملية (مهم لأمان AES-GCM)
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+
+      const aesKey = await deriveAesKeyFromPassphrase(passphrase, salt);
+
+      const ciphertextBuffer = await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv: iv },
+        aesKey,
+        strToBytes(plaintext)
+      );
+
+      const ciphertext = new Uint8Array(ciphertextBuffer);
+
+      // الإخراج بصيغة: Base64(salt).Base64(iv).Base64(ciphertext)
+      const payload = [
+        bytesToBase64(salt),
+        bytesToBase64(iv),
+        bytesToBase64(ciphertext)
+      ].join(".");
+
+      resultArea.value = payload;
+    }
+
+    // ==============================
+    // فك التشفير
+    // ==============================
+    async function decryptText() {
+      // التحقق من المفتاح
+      if (!validateKey()) {
+        alert("عذراً، هذا المفتاح غير مصرح له بدخول الغرف السرية!");
+        return;
+      }
+
+      const passphrase = keyInput.value.trim();
+      const payload = textInput.value.trim();
+
+      if (!payload || payload.length === 0) {
+        alert("الرجاء لصق/إدخال النص المشفر لفك التشفير.");
+        return;
+      }
+
+      // قراءة payload
+      const parts = payload.split(".");
+      if (parts.length !== 3) {
+        alert("صيغة النص المشفر غير صحيحة. تأكد أنها بالشكل: Base64(salt).Base64(iv).Base64(ciphertext)");
+        return;
+      }
+
+      try {
+        const salt = base64ToBytes(parts[0]);
+        const iv = base64ToBytes(parts[1]);
+        const ciphertext = base64ToBytes(parts[2]);
+
+        const aesKey = await deriveAesKeyFromPassphrase(passphrase, salt);
+
+        const plaintextBuffer = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv: iv },
+          aesKey,
+          ciphertext
+        );
+
+        const plaintext = bytesToStr(new Uint8Array(plaintextBuffer));
+        resultArea.value = plaintext;
+      } catch (err) {
+        // غالباً بسبب مفتاح خاطئ أو تلف في النص المشفر
+        alert("فشل فك التشفير. تأكد من المفتاح وصحة النص المشفر.");
+      }
+    }
+
+    // ==============================
+    // زر النسخ مع تغيير اللون عند النسخ
+    // ==============================
+    async function copyResult() {
+      const value = resultArea.value;
+
+      if (!value || value.trim().length === 0) {
+        alert("لا توجد نتيجة للنسخ.");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(value);
+        const oldText = copyBtn.textContent;
+        copyBtn.textContent = "تم النسخ ✓";
+        copyBtn.classList.add("copied");
+
+        setTimeout(() => {
+          copyBtn.textContent = oldText;
+          copyBtn.classList.remove("copied");
+        }, 1200);
+      } catch (err) {
+        // fallback
+        resultArea.select();
+        document.execCommand("copy");
+      }
+    }
+
+    // ==============================
+    // زر العين: إظهار/إخفاء كلمة السر
+    // ==============================
+    let isEyeOpen = false;
+    eyeBtn.addEventListener("click", () => {
+      isEyeOpen = !isEyeOpen;
+      keyInput.type = isEyeOpen ? "text" : "password";
+    });
+
+    // ==============================
+    // ربط الأزرار
+    // ==============================
+    encryptBtn.addEventListener("click", async () => {
+      encryptBtn.disabled = true;
+      decryptBtn.disabled = true;
+      try {
+        await encryptText();
+      } finally {
+        validateKey();
+      }
+    });
+
+    decryptBtn.addEventListener("click", async () => {
+      encryptBtn.disabled = true;
+      decryptBtn.disabled = true;
+      try {
+        await decryptText();
+      } finally {
+        validateKey();
+      }
+    });
+
+    copyBtn.addEventListener("click", copyResult);
+
+    // ==============================
+    // تفعيل/تعطيل حسب المفتاح
+    // ==============================
+    keyInput.addEventListener("input", () => {
+      validateKey();
+    });
+
+    // ==============================
+    // بدء الحالة
+    // ==============================
+    encryptBtn.disabled = true;
+    decryptBtn.disabled = true;
+    authDot.classList.remove("ok");
+    authDot.classList.remove("bad");
+  </script>
+</body>
+</html>
+فريق الشبح الفلسطيني لتعليم الأمن السيبراني 
